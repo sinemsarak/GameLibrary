@@ -35,7 +35,6 @@ public class Game {
     @ManyToOne(targetEntity = Genre.class)
     @JoinColumn(name = "genre_id",referencedColumnName = "genre_id")
     private Genre genre;
-    //todo olmayan bi game id ile bağlamaya çalışırsam genre not found exception koyalım
 
     @Column
     private String overview;

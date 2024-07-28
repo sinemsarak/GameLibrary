@@ -1,5 +1,6 @@
 package com.example.GameLibrary.Exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -28,5 +29,9 @@ public class ExceptionHandlerConfig {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
-    //TODO invalid enumlar icin bi handling durumu yazmayı deneyelim
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There are games dependent on this genre; therefore, it cannot be deleted.");
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.GameLibrary.dtos.Responses.genres;
 
+import com.example.GameLibrary.dtos.Responses.games.GameResponseDto;
 import com.example.GameLibrary.entities.Game;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

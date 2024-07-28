@@ -1,6 +1,9 @@
 package com.example.GameLibrary.service.games;
 
+import com.example.GameLibrary.Exceptions.GameNotFoundException;
+import com.example.GameLibrary.Exceptions.GenreNotFoundException;
 import com.example.GameLibrary.Exceptions.NotFoundException;
+import com.example.GameLibrary.dataAccess.GenreRepo;
 import com.example.GameLibrary.dtos.Requests.Games.GameUpdateRequestDto;
 import com.example.GameLibrary.dtos.Responses.games.GameResponseDto;
 import com.example.GameLibrary.entities.Game;
@@ -15,39 +18,47 @@ import java.util.List;
 public final class GameManager implements GameService {
 
     private final GameRepo gameRepo;
+    private final GameMapper mapper;
+    private final GenreRepo genreRepo;
 
-    public GameManager(GameRepo gameRepo) {
+    public GameManager(GameRepo gameRepo, GameMapper mapper, GenreRepo genreRepo) {
         this.gameRepo = gameRepo;
+        this.mapper = mapper;
+        this.genreRepo = genreRepo;
     }
 
     @Override
     public List<GameResponseDto> getAllByGenreId(Long genreId) {
-        return this.gameRepo.findAllBygenreId(genreId).stream().map(this::convertEntityToDto).toList();
+        return this.gameRepo.findAllBygenreId(genreId).stream().map(mapper::convertEntityToDto).toList();
     }
 
     @Override
     public String add(GameAddRequestDto dto) {
-        Game g = convertDtoToEntity(dto);
+        Game g = mapper.handleAddGame(this.genreRepo,dto);
         this.gameRepo.save(g);
         return g.getName() + " successfully added";
     }
 
     @Override
     public String delete(Long id) {
-        Game g = this.gameRepo.findById(id).orElseThrow(()-> new NotFoundException(id));
+        Game g = this.gameRepo.findById(id).orElseThrow(()-> new GameNotFoundException(id));
+        Genre genre = this.genreRepo.findById(g.getGenre().getId()).orElseThrow(()-> new GenreNotFoundException(id));;
+        genre.setGameCount(genre.getGameCount()-1);
+        genreRepo.save(genre);
         this.gameRepo.delete(g);
+
         return g.getName() + " successfully deleted";
     }
 
     @Override
     public GameResponseDto getById(Long id) {
-       Game g = this.gameRepo.findById(id).orElseThrow(()-> new NotFoundException(id));
-       return convertEntityToDto(g);
+       Game g = this.gameRepo.findById(id).orElseThrow(()-> new GameNotFoundException(id));
+       return mapper.convertEntityToDto(g);
     }
 
     @Override
     public List<GameResponseDto> getAllGames() {
-        return this.gameRepo.findAll().stream().map(this::convertEntityToDto).toList();
+        return this.gameRepo.findAll().stream().map(mapper::convertEntityToDto).toList();
     }
 
     @Override
@@ -58,40 +69,12 @@ public final class GameManager implements GameService {
 
     @Override
     public String update(GameUpdateRequestDto dto) {
-        Game g = this.gameRepo.findById(dto.id()).orElseThrow(()->new NotFoundException(dto.id()));
-        g.setName(dto.name());
-        g.setPlayers(dto.players());
-        g.setPrice(dto.price());
-        //g.setGenreId(dto.genreId());
-        g.setOverview(dto.overview());
-        g.setInputDevices(dto.inputDevices());
-        g.setReleaseDate(dto.releaseDate());
-
-        this.gameRepo.save(g);
-        return g.getName() + " successfully updated";
+        this.gameRepo.save(mapper.convertDtoToEntity(this.gameRepo,dto));
+        return dto.name() + " successfully updated";
     }
 
 
 
-    private Game convertDtoToEntity(GameAddRequestDto dto){
-        Game g = new Game();
-        Genre genre = new Genre();
-        genre.setId(dto.genreId());
-
-        g.setName(dto.name());
-        g.setPlayers(dto.players());
-        g.setPrice(dto.price());
-        g.setGenre(genre);
-        g.setOverview(dto.overview());
-        g.setInputDevices(dto.inputDevices());
-        g.setReleaseDate(new Date());
-
-        return g;
-    }
-    //todo update için de game şeyisisi yaz güncelle
-    private GameResponseDto convertEntityToDto(Game g){
-        return new GameResponseDto(g.getId(),g.getName(),g.getOverview(),g.getPrice(),g.getInputDevices(),g.getPlayers(),g.getReleaseDate());
-    }
 
 
 }

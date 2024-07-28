@@ -1040,3 +1040,18 @@ Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:522)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 50 more
+2024-07-29 00:21:22.215517+03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM GENRES \000d\000a\000d\000a\000d\000a\000d\000a\000d\000a\000d\000a\000d\000a\000d\000a\000d\000a\000d\000a\000d\000a\000d\000aGENRES [*]GAMES"; SQL statement:
+SELECT * FROM GENRES 
+
+
+
+
+
+
+
+
+
+
+
+GENRES GAMES [42000-224]

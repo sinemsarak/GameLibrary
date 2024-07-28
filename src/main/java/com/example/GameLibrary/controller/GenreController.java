@@ -3,6 +3,7 @@ package com.example.GameLibrary.controller;
 
 import com.example.GameLibrary.dtos.Requests.Genres.GenreAddRequestDto;
 import com.example.GameLibrary.dtos.Requests.Genres.GenreUpdateRequestDto;
+import com.example.GameLibrary.dtos.Responses.genres.GenreDetailedResponseDto;
 import com.example.GameLibrary.dtos.Responses.genres.GenreResponseDto;
 import com.example.GameLibrary.service.genres.GenreService;
 import jakarta.validation.Valid;
@@ -49,6 +50,11 @@ public class GenreController {
     @GetMapping("getall")
     public ResponseEntity<List<GenreResponseDto>> getAll(){
         return ResponseEntity.status(HttpStatus.OK).body(genreService.getAllGenres());
+    }
+
+    @GetMapping("getdetailedgenre")
+    public ResponseEntity<GenreDetailedResponseDto> getDetailedGenreByID(@RequestParam Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(genreService.getDetailedByID(id));
     }
 
 }

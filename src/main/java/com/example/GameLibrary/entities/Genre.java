@@ -29,9 +29,11 @@ public class Genre {
 
     @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
     private List<Game> games;
+    //20 temmuz videosunda yazılan querye benzer bir şey işimize yarayabilir
+    //burada da yarayabilir
 
     private int gameCount;
-    //todo bunu unutma burda
+
 
 
 }
