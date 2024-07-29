@@ -1,5 +1,6 @@
 package com.example.GameLibrary.entities;
 
+import com.example.GameLibrary.aop.annotations.GenreNameMustBeUnique;
 import com.example.GameLibrary.enums.InputDevice;
 import com.example.GameLibrary.enums.Players;
 import jakarta.persistence.*;
@@ -10,8 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "Games")
@@ -29,6 +28,7 @@ public class Game {
 
     @Column(name = "game_name")
     @NotEmpty
+
     private String name;
 
 

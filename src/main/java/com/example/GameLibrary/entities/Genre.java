@@ -1,5 +1,6 @@
 package com.example.GameLibrary.entities;
 
+import com.example.GameLibrary.aop.annotations.GenreNameMustBeUnique;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
